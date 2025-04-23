@@ -6,6 +6,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 //@Controller
@@ -30,4 +31,30 @@ public class DoctorController {
         return "Doctor saved successfully";
     }
 
+    @PostMapping("/saveList")
+    public String saveDoctorList(@RequestBody List<Doctor> doctorList){
+        for(Doctor d1:doctorList){
+            doctorMapDb.put(d1.getId(), d1);
+        }
+        System.out.println("Doctors saved is : "+doctorMapDb);
+        return "DoctorList is saved";
+    }
+
+    @GetMapping("/findAll")
+    public Map<Integer, Doctor> getAllDoctors(){
+        return doctorMapDb;
+    }
+
+    // @PathVariable - takes the input in API url path or endpoint
+    @GetMapping("/findById/{id}")
+    public Doctor getDoctorById(@PathVariable int id){
+        Doctor doctor = doctorMapDb.get(id);
+        return doctor;
+    }
+
+    @DeleteMapping("/delete/{id}")
+    public String deleteDoctorById(@PathVariable int id){
+        doctorMapDb.remove(id);
+        return "Doctor deleted successfully with id : "+id;
+    }
  }
